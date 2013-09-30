@@ -1,47 +1,76 @@
-<script>
-  function loaded() {
-    items = window.performance.getEntriesByType("resource")
-    {
-      item = items[0]
-      document.write('<h3>resource summary</h3>')
-      document.write('connectEnd: ' + item.connectEnd + '<br>')
-      document.write('connectStart: ' + item.connectStart + '<br>')
-      document.write('domainLookupEnd: ' + item.domainLookupEnd + '<br>')
-      document.write('domainLookupStart: ' + item.domainLookupStart + '<br>')
-      document.write('duration: ' + item.duration + '<br>')
-      document.write('entryType: ' + item.entryType + '<br>')
-      document.write('fetchStart: ' + item.fetchStart + '<br>')
-      document.write('initiatorType: ' + item.initiatorType + '<br>')
-      document.write('name: ' + item.name + '<br>')
-      document.write('redirectEnd: ' + item.redirectEnd + '<br>')
-      document.write('redirectStart: ' + item.redirectStart + '<br>')
-      document.write('requestStart: ' + item.requestStart + '<br>')
-      document.write('responseEnd: ' + item.responseEnd + '<br>')
-      document.write('responseStart: ' + item.responseStart + '<br>')
-      document.write('secureConnectionStart: ' + item.secureConnectionStart + '<br>')
-      document.write('startTime: ' + item.startTime + '<br>')
-    }
-    document.write('<h3>page summary</h3>')
-    document.write('navigationStart: ' + window.performance.timing.navigationStart + '<br>')
-    document.write('redirectStart: ' + window.performance.timing.redirectStart + '<br>')
-    document.write('redirectEnd: ' + window.performance.timing.redirectEnd + '<br>')
-    document.write('fetchStart: ' + window.performance.timing.fetchStart + '<br>')
-    document.write('domainLookupStart: ' + window.performance.timing.domainLookupStart + '<br>')
-    document.write('domainLookupEnd: ' + window.performance.timing.domainLookupEnd + '<br>')
-    document.write('connectStart: ' + window.performance.timing.connectEnd + '<br>')
-    document.write('secureConnectionStart: ' + window.performance.timing.secureConnectionStart + '<br>')
-    document.write('connectEnd : ' + window.performance.timing.loadEventEnd + '<br>')
-    document.write('requestStart: ' + window.performance.timing.requestStart + '<br>')
-    document.write('responseStart: ' + window.performance.timing.responseStart + '<br>')
-    document.write('unloadEventEnd: ' + window.performance.timing.unloadEventEnd + '<br>')
-    document.write('unloadEventStart: ' + window.performance.timing.unloadEventStart + '<br>')
-    document.write('responseEnd: ' + window.performance.timing.responseEnd + '<br>')
-    document.write('domLoading: ' + window.performance.timing.domLoading + '<br>')
-    document.write('domInteractive: ' + window.performance.timing.domInteractive + '<br>')
-    document.write('domContentLoadedEventStart: ' + window.performance.timing.domContentLoadedEventStart + '<br>')
-    document.write('domContentLoadedEventEnd: ' + window.performance.timing.domContentLoadedEventEnd + '<br>')
-    document.write('domComplete: ' + window.performance.timing.domComplete + '<br>')
-    document.write('loadEventEnd: ' + window.performance.timing.loadEventEnd + '<br>')
-    document.write('loadEventStart: ' + window.performance.timing.loadEventStart + '<br>')
+function ResourceInfo(resource) {
+  this.connectStart = resource.connectStart;
+  this.connectEnd = resource.connectEnd;
+  this.domainLookupStart = resource.domainLookupStart;
+  this.domainLookupEnd = resource.domainLookupEnd;
+  this.duration = resource.duration;
+  this.entryType = resource.entryType;
+  this.fetchStart = resource.fetchStart;
+  this.initiatorType = resource.initiatorType;
+  this.name = resource.name;
+  this.redirectStart = resource.redirectStart;
+  this.redirectEnd = resource.redirectEnd;
+  this.requestStart = resource.requestStart;
+  this.responseStart = resource.responseStart;
+  this.responseEnd = resource.responseEnd;  
+  this.secureConnectionStart = resource.secureConnectionStart;
+  this.startTime = resource.startTime;
+	
+  this.summary = function() {
+    ret = 'name : ' + this.name + ', duration : ' + this.duration;
+	return ret;
   }
-</script>
+}
+
+function PageInfo(page) {
+  this.navigationStart = page.navigationStart;
+  this.connectStart = page.connectStart;
+  this.connectEnd = page.connectEnd;
+  this.domainLookupStart = page.domainLookupStart;
+  this.domainLookupEnd = page.domainLookupEnd;
+  this.fetchStart = page.fetchStart;
+  this.redirectStart = page.redirectStart;
+  this.redirectEnd = page.redirectEnd;
+  this.requestStart = page.requestStart;
+  this.responseStart = page.responseStart;
+  this.responseEnd = page.responseEnd;
+  this.secureConnectionStart = page.secureConnectionStart;
+  this.unloadEventStart = page.unloadEventStart;
+  this.unloadEventEnd = page.unloadEventEnd;
+  this.domLoading = page.domLoading;
+  this.domInteractive = page.domInteractive;
+  this.domContentLoadedEventStart = page.domContentLoadedEventStart;
+  this.domContentLoadedEventEnd = page.domContentLoadedEventEnd;
+  this.domComplete = page.domComplete;
+  this.loadEventStart = page.loadEventStart;
+  this.loadEventEnd = page.loadEventEnd;
+    	
+  this.summary = function() {
+    ret = 'domainLookupStart : ' + this.domainLookupStart + ', domainLookupEnd : ' + this.domainLookupEnd;
+	return ret;
+  }
+}
+
+function loaded() {
+  /* 
+  headline = document.getElementById("mainbody")
+  headline.innerHTML  = "<h3>Resources loaded.</h3>"
+  
+  body = document.getElementById("mainbody")
+  image = document.getElementById("image")
+  body.removeChild(image)
+  */
+
+  document.write('<h3>Resource loaded.</h3>');  
+  
+  pageInfo = new PageInfo(window.performance.timing);
+  document.write('<h3>Page loading summary</h3>');
+  document.write(pageInfo.summary());
+  
+  items = window.performance.getEntriesByType('resource');
+  for (i = 0; i < items.length; i++) {
+    resourceInfo = new ResourceInfo(items[i]);
+	document.write('<h3>Resource loading summary</h3>');
+	document.write(resourceInfo.summary());
+  }
+}
