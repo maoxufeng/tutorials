@@ -52,25 +52,27 @@ function PageInfo(page) {
 }
 
 function loaded() {
-  /* 
-  headline = document.getElementById("mainbody")
-  headline.innerHTML  = "<h3>Resources loaded.</h3>"
+  headline = document.getElementById("headline");
+  headline.innerHTML  = "<h3>Resources loaded.</h3>";
   
-  body = document.getElementById("mainbody")
-  image = document.getElementById("image")
-  body.removeChild(image)
-  */
-
-  document.write('<h3>Resource loaded.</h3>');  
+  body = document.getElementById("mainbody");
+  newEli = document.createElement("div");
+  newEli.id = "summary"
+  // image = document.getElementById("image")
+  // body.removeChild(image)
   
   pageInfo = new PageInfo(window.performance.timing);
-  document.write('<h3>Page loading summary</h3>');
-  document.write(pageInfo.summary());
+  content = '<h3>Page loading summary</h3>';
+  content += pageInfo.summary();
   
   items = window.performance.getEntriesByType('resource');
   for (i = 0; i < items.length; i++) {
     resourceInfo = new ResourceInfo(items[i]);
-	document.write('<h3>Resource loading summary</h3>');
-	document.write(resourceInfo.summary());
+	content += '<h3>Resource loading summary</h3>';
+	content += resourceInfo.summary();
   }
+  
+  newEli.innerHTML = content;
+  
+  body.appendChild(newEli);
 }

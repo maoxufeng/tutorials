@@ -2,15 +2,21 @@
 <html>
   <head>
     <title>Getting Started with Performance API testing</title>
-    <meta charset = "utf-8">
-    <!--link rel = "stylesheet" href = "nosuchfile.css"-->
-    <script src = "perfcall.js"></script>
+    <meta charset="utf-8">
+    <!--link rel="stylesheet" href="nosuchfile.css"-->
+    <script src="perfcall.js"></script>
   </head>
-  <body id = "mainbody" onload = "loaded()">
-    <h3 id = "headline">Resources loading...</h3>    
-    <img id = "image" src = "https://raw.github.com/maoxufeng/tutorials/master/simplehtml/perfcall.code.jpg?raw=true" hidden = true>
-    <!--p>
-      Join us any evening for refreshing <a href="elixirs.html">elixirs</a>,
-    </p-->
+  <body id="mainbody" onload="loaded()">
+    <h3 id="formhl">Form</h3>
+	<form>
+      <input type="text" id="resourceTextInput" size="40" placeholder="Add resource here">
+      <input type="button" id="addButton" value="Add Resource">
+    </form>
+    <h3 id="headline">Resources loading...</h3>
+	<ul id="resourcelist">
+    </ul>
+    <img id="image" src="https://raw.github.com/maoxufeng/tutorials/master/simplehtml/perfcall.code.jpg?raw=true" hidden=true>
+    <!--div id="placeholder">
+    </div-->
   </body>
 </html>
