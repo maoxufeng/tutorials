@@ -11,6 +11,11 @@ git clone https://github.com/spring-guides/tut-web.git
 
 I've removed gradlew support, because it is unnecessary if the gradle is installed.
 
+you can try
+
+gradle eclipse
+gradle test
+
 2
 ==========
 The very beginning example.
