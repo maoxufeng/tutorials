@@ -1,9 +1,14 @@
-tutorials
+Tutorials
 =========
 
 It's a bunch of tutorials, simply for practice and quick reference. Have fun.
 
-Booklist
+Books
 =========
 
 Head First HTML5 Programming
+
+Resources
+=========
+
+Tutorials from spring website, http://spring.io/guides
