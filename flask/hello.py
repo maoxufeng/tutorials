@@ -1,4 +1,6 @@
-from flask import Flask, url_for
+from flask import Flask
+from flask import url_for
+from flask import render_template
 
 # about the first argument, '__name__'
 # the document says
@@ -20,12 +22,13 @@ def index():
 
 # For example
 # http://hostname/hello/abc
+# http://hostname/hello gets 404
 @app.route('/hello/<username>')
 def hello(username):
   return 'Hello %s!' % username
 
 # use <int:num> to limit the type of variable input as an integer
-# if the variable can not be converted to an integer, the user would get a 404 page
+# if the variable can not be converted to an integer, the user would get a 404 page 
 # For example
 # http://hostname/integerecho/123
 # http://hostname/integerecho/abc
@@ -62,13 +65,20 @@ def urlgenerator(path):
   with app.test_request_context():
     return url_for(path, username = 'John Doe')
 
-if __name__ == '__main__':
+# For example
+# http://hostname/gogo/abc
+@app.route('/gogo/')
+@app.route('/gogo/<name>')
+def gogo(name = None):
+  return render_template('gogo.html', name = name)
 
+if __name__ == '__main__':
+    
   # in case you really need debug mode
   # it would print the stack trace on the page
   # and might cause security issues
   # while during development, it is quite helpful
-  # the app detects and reloads the change automatically
+  # the app detects and reloads the change automatically 
   app.run(host = '0.0.0.0', port = 80, debug = True)
 
   #app.run(host = '0.0.0.0', port = 80)
@@ -77,4 +87,4 @@ if __name__ == '__main__':
   # simply create a directory named 'static'
   # and put files under static
   # then use http://hostname/static/filename to access the file
-  # note that, you might need to figure out how to set MIME type
+  # note that, you might need to figure out how to set MIME type 
