@@ -110,3 +110,11 @@ Action
 1.Add a controller with command object, CustomerInfo, it seems like basket.clear() helps create a new Basket, but I think the order of 'basket.clear();' and 'LOG.debug("Basket now has {} items", basket.getSize());' is not correct.
 
 2.'gradle test' encounters error.
+
+Project 6
+==========
+Step 6: Securing the Web Application
+
+Back to configuration domain
+
+It's just for illustration and pretty naive, just ignore this one.
