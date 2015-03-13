@@ -13,8 +13,7 @@ function TaskAtHandApp() {
 		}).focus();
 		$("#app header").append(version);
 		setStatus("ready");
-	};
-	
+	};	
 	function addTask() {
 		var taskName = $("#new-task-name").val();
 		if (taskName) {
@@ -24,15 +23,18 @@ function TaskAtHandApp() {
 		}
 	}
 	function addTaskElement(taskName) {
-		var $task = $("<li></li>");
-		var $delete = $("<button class='delete'>X</button>");
-		var $moveUp = $("<button class='move-up'>^</button>");
-		var $moveDown = $("<button class='move-up'>v</button>");
-		$task.append($delete).append($moveUp).append($moveDown).append("<span class='task-name'>" + taskName + "</span>");
+		var $task = $("#task-template .task").clone();
+		$("span.task-name", $task).text(taskName);
 		$("#task-list").append($task);
-		$delete.click(function() {$task.remove();});
-		$moveUp.click(function() {$task.insertBefore($task.prev());});
-		$moveDown.click(function() {$task.insertAfter($task.next());});
+		$("button.delete", $task).click(function() {
+			$task.remove();
+		});
+		$("button.move-up", $task).click(function() {
+			$task.insertBefore($task.prev());
+		});
+		$("button.move-down", $task).click(function() {
+			$task.insertAfter($task.next());
+		});
 	}
 }
 

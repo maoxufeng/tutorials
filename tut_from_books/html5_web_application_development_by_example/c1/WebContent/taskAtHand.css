@@ -24,14 +24,14 @@ button {
 	background-color: #bbc;
 }
 
-#app>header {
+#app > header {
 	padding: 0 0.5em;
 	font-size: 1.5em;
 	color: WhiteSmoke;
 	background-color: #006;
 }
 
-#app>footer {
+#app > footer {
 	padding: 0.25em;
 	color: WhiteSmoke;
 	background-color: #006;
@@ -39,4 +39,16 @@ button {
 
 #main {
 	margin: 1em;
+}
+
+#task-list .task .tools {
+	display: inline-block;
+}
+
+#task-list .task .tools button {
+	margin: 0;
+	padding: 0;
+	width: 1.25em;
+	height: 1.25em;
+	border: none;
 }
