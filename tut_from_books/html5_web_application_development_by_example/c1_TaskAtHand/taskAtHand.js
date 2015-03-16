@@ -1,7 +1,16 @@
 function TaskAtHandApp() {
 	var version = "v1.0";
+	var appStorage = new AppStorage("taskAtHand");
 	function setStatus(message) {
 		$("#app>footer").text(message);
+	}
+	function loadTaskList() {
+		var tasks = appStorage.getValue("taskList");
+		if (tasks) {
+		for (var i in tasks) {
+			addTaskElement(tasks[i]);
+			}
+		}
 	}
 	this.start = function() {
 		$("#new-task-name").keypress(function(e) {
@@ -12,6 +21,7 @@ function TaskAtHandApp() {
 			}
 		}).focus();
 		$("#app header").append(version);
+		loadTaskList();
 		setStatus("ready");
 	};	
 	function addTask() {
@@ -27,14 +37,55 @@ function TaskAtHandApp() {
 		$("span.task-name", $task).text(taskName);
 		$("#task-list").append($task);
 		$("button.delete", $task).click(function() {
-			$task.remove();
+			removeTask($task);
 		});
 		$("button.move-up", $task).click(function() {
-			$task.insertBefore($task.prev());
+			moveTask($task, true);
 		});
 		$("button.move-down", $task).click(function() {
-			$task.insertAfter($task.next());
+			moveTask($task, false);
 		});
+		$("span.task-name", $task).click(function() {
+			onEditTaskName($(this));
+		});
+		$("input.task-name", $task).change(function() {
+			onChangeTaskName($(this));
+		})
+		.blur(function() {
+			$(this).hide().siblings("span.task-name").show();
+		});
+		saveTaskList();
+	}
+	function removeTask($task) {
+		$task.remove();
+		saveTaskList();
+	}
+	function moveTask($task, moveUp) {
+		if (moveUp)	{
+			$task.insertBefore($task.prev());
+		} else {
+			$task.insertAfter($task.next());
+		}
+		saveTaskList();
+	}
+	function onEditTaskName($span) {
+		$span.hide().siblings("input.task-name")
+			.val($span.text()).show().focus();
+	}
+	function onChangeTaskName($input) {
+		$input.hide();
+		var $span = $input.siblings("span.task-name");
+		if ($input.val()) {
+			$span.text($input.val());
+		}
+		$span.show();
+	}
+	function saveTaskList() {
+		var tasks = [];
+		$("#task-list .task span.task-name").each(function() {
+			tasks.push($(this).text())
+		});
+		appStorage.setValue("taskList", tasks);
 	}
 }
 
