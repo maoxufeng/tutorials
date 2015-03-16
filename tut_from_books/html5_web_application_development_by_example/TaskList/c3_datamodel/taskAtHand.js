@@ -1,16 +1,26 @@
 function TaskAtHandApp() {
 	var version = "v1.0";
 	var appStorage = new AppStorage("taskAtHand");
-	function setStatus(message) {
-		$("#app>footer").text(message);
+	var taskList = new TaskList();
+	var timeoutId = 0;
+	function setStatus(message, noFade) {
+		$("#app>footer").text(message).show();
+		if (!noFade) {
+			$("#app>footer").fadeOut(1000);
+		}
 	}
 	function loadTaskList() {
 		var tasks = appStorage.getValue("taskList");
-		if (tasks) {
-		for (var i in tasks) {
-			addTaskElement(tasks[i]);
-			}
-		}
+		taskList = new TaskList(tasks);
+		rebuildTaskList();
+	}
+	function rebuildTaskList() {
+		// Remove any old task elements
+		$("#task-list").empty();
+		// Create DOM elements for each task
+		taskList.each(function(task) {
+			addTaskElement(task);
+		});
 	}
 	this.start = function() {
 		$("#new-task-name").keypress(function(e) {
@@ -27,14 +37,39 @@ function TaskAtHandApp() {
 	function addTask() {
 		var taskName = $("#new-task-name").val();
 		if (taskName) {
-			addTaskElement(taskName);
+			var task = new Task(taskName);
+			taskList.addTask(task);
+			appStorage.setValue("nextTaskId", Task.nextTaskId);
+			addTaskElement(task);
+			saveTaskList();
 			// Reset the text field
 			$("#new-task-name").val("").focus();
 		}
 	}
-	function addTaskElement(taskName) {
+	function onChangeTaskDetails(taskId, $input) {
+		var task = taskList.getTask(taskId)
+		if (task) {
+			var fieldName = $input.data("field");
+			task[fieldName] = $input.val();
+			saveTaskList();
+		}
+	}
+	function addTaskElement(task) {
 		var $task = $("#task-template .task").clone();
-		$("span.task-name", $task).text(taskName);
+		$task.data("task-id", task.id);
+		$("span.task-name", $task).text(task.name);
+		
+		// Populate all of the details fields
+		$(".details input, .details select", $task).each(function() {
+			var $input = $(this);
+			var fieldName = $input.data("field");
+			$input.val(task[fieldName]);
+		});
+		$(".details input, .details select", $task).change(function() {
+			onChangeTaskDetails(task.id, $(this));
+		});
+
+
 		$("#task-list").append($task);
 		$("button.delete", $task).click(function() {
 			removeTask($task);
@@ -105,11 +140,14 @@ function TaskAtHandApp() {
 		}
 	}
 	function saveTaskList() {
-		var tasks = [];
-		$("#task-list .task span.task-name").each(function() {
-			tasks.push($(this).text())
-		});
-		appStorage.setValue("taskList", tasks);
+		if (timeoutId) clearTimeout(timeoutId);
+		setStatus("saving changes...", true);
+		timeoutId = setTimeout(function() {
+			appStorage.setValue("taskList", taskList.getTasks());
+			timeoutId = 0;
+			setStatus("changes saved.");
+		},
+		2000);
 	}
 }
 
