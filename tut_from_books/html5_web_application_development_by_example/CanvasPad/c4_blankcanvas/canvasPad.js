@@ -85,6 +85,12 @@ function CanvasPadApp() {
 						action.points[1],
 						action.fill);
 					break;
+				case "circle":
+					var dx = Math.abs(action.points[1].x - action.points[0].x);
+					var dy = Math.abs(action.points[1].y - action.points[0].y);
+					var radius = Math.min(dx, dy);
+					canvas2d.drawCircle(action.points[0], radius,	action.fill);
+					break;
 			}
 		}
 		canvas2d.restorePen();
