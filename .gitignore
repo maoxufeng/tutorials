@@ -3,3 +3,9 @@
 .project
 .settings
 build
+
+target
+target/*
+
+logs
+logs/*
